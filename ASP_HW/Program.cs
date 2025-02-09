@@ -37,7 +37,7 @@ app.UseStatusCodePages(async context =>
     }
 });
 
-#region Comment to use second task
+#region Comment this to use second task
 
 // Завдання 3: Middleware для автентифікації
 app.Use(async (context, next) =>
