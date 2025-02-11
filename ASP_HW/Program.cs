@@ -1,64 +1,19 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using ASP_HW.Middleware;
+using ASP_HW.Models;
+
+//За допомогою патерну Dependency Injection реалізувати таке завдання.
+//Створити інтерфейс IWeapon з методом Kill, а також класи реалізації (наприклад, Bazuka і Sword), і клас Warrior, який користується зброєю.
+//Воїн (Warrior) не знає, чи є в нього зброя, і видачею зброї займається окремий модуль, а не головна програма. Використання фреймворка Ninject або Autofac рідного контейнера DI має забезпечити можливість централізованої заміни класу реалізації.
+//У подання вивести результат виклику методу Kill(), який повертає рядок з описом способу дії встановленої як реалізація зброї. Для виводу використовувати клас middleware.
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Тут можна вибрати bazuka або sword
+builder.Services.AddTransient<IWeapon, Bazuka>();
+builder.Services.AddTransient<Warrior>();
+
 var app = builder.Build();
 
-// Завдання 1: Логування запитів
-app.Use(async (context, next) =>
-{
-    Console.WriteLine($"[{DateTime.Now}] {context.Request.Method} {context.Request.Path}");
-    await next();
-});
-
-// Завдання 2: Обробка винятків
-app.UseExceptionHandler(errorApp =>
-{
-    errorApp.Run(async context =>
-    {
-        var statusCode = context.Response.StatusCode;
-        string message = statusCode switch
-        {
-            404 => "Page not found",
-            401 => "Unauthorized",
-            _ => "Internal server error"
-        };
-        await context.Response.WriteAsync(message);
-    });
-});
-
-app.UseStatusCodePages(async context =>
-{
-    var response = context.HttpContext.Response;
-    if (response.StatusCode == 404)
-    {
-        await response.WriteAsync("404 - Page not found");
-    }
-    else if (response.StatusCode == 401)
-    {
-        await response.WriteAsync("401 - Unauthorized");
-    }
-});
-
-#region Comment to use second task
-
-// Завдання 3: Middleware для автентифікації
-app.Use(async (context, next) =>
-{
-    if (!context.Request.Query.ContainsKey("secret-token") ||
-        context.Request.Query["secret-token"] != "1234")
-    {
-        context.Response.StatusCode = 401;
-        await context.Response.WriteAsync("401 Unauthorized");
-        return;
-    }
-    await next();
-});
-
-// Основний обробник запитів
-app.Run(async (context) =>
-{
-    await context.Response.WriteAsync("hello!");
-    // https://localhost:7158/?secret-token=1234 for testing
-});
-
-#endregion
+app.UseMiddleware<WarriorMiddleware>();
 
 app.Run();
