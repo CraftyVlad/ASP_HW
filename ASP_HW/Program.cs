@@ -4,12 +4,15 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-app.UseExceptionHandler("/Shared/Error");
+app.UseExceptionHandler("/Home/Error");
+app.UseHsts();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
