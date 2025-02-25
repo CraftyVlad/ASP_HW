@@ -1,0 +1,12 @@
+﻿@model List<Blog>
+
+<h2>Articles by Author</h2>
+<ul>
+    @foreach (var article in Model)
+    {
+        <li>
+            <a href="/blog/@article.Slug">@article.Title</a>
+        </li>
+    }
+</ul>
+<a href="/blog">Back to blogs</a>

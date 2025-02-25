@@ -1,0 +1,14 @@
+﻿@model List<Course>
+
+<h2>Top 3 Courses by enrollment</h2>
+
+<ol>
+    @foreach (var course in Model)
+    {
+        <li>
+            <a href="/courses/details/@course.Id">@course.Name</a> | @course.StudentsEnrolled students |
+            <a href="/courses/enroll/@course.Id">Enroll</a>
+        </li>
+    }
+</ol>
+<a href="/">Back to main</a>

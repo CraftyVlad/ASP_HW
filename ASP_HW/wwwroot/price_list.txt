@@ -1,3 +1,0 @@
-1, Phone, 500, Electronics
-2, Laptop, 1000, Electronics
-3, TV, 2000, Electronics
