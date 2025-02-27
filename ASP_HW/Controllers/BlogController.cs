@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ASP_HW.Models;
+using System.IO.Compression;
 
 namespace ASP_HW.Controllers
 {
@@ -27,11 +28,14 @@ namespace ASP_HW.Controllers
             return View(article);
         }
 
-        [Route("blog/author/{name:regex([[a-zA-Z]]+)}")]
+        [Route("blog/author/{name:regex(^[[a-zA-Z]]+$)}")]
         public IActionResult Author(string? name)
         {
             var authorArticles = Articles.Where(a => a.Name == name).ToList();
-            if (!authorArticles.Any()) return NotFound();
+
+            if (!authorArticles.Any()) 
+                return NotFound();
+
             return View(authorArticles);
         }
     }
